@@ -6,8 +6,10 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 import uz.bakhromjon.entities.Post;
 import uz.bakhromjon.entities.PostComment;
+import uz.bakhromjon.entities.PostCommentDetails;
 import uz.bakhromjon.repositories.PostDAO;
 
+import javax.persistence.EntityManager;
 import java.util.List;
 
 /**
@@ -15,9 +17,11 @@ import java.util.List;
  **/
 @Component
 public class DataLoader implements CommandLineRunner {
+
     @Autowired
     private PostDAO postDAO;
-
+    @Autowired
+    private EntityManager entityManager;
     @Value("${spring.jpa.hibernate.ddl-auto}")
     private String ddl;
 
@@ -26,16 +30,11 @@ public class DataLoader implements CommandLineRunner {
         if (ddl.contains("create")) {
             postDAO.doInJPA();
         }
-        PostComment postComment1 = postDAO.find(1L);
-        PostComment postComment2 = postDAO.findJPQL(1L);
-        Post post = postComment1.getPost();
-//        System.out.println(post.toString());
-        System.out.println(post.getId());
-//        System.out.println(postComment1.toString());
-//        System.out.println(postComment2.toString());
-        List<PostComment> list =
-                postDAO.list();
-//        System.out.println(list);
-//        System.out.println(list.size());
+
+        List<PostCommentDetails> commentDetailsList = entityManager.createQuery("""
+                select pcd
+                from PostCommentDetails pcd
+                order by pcd.id
+                """, PostCommentDetails.class).getResultList();
     }
 }

@@ -14,7 +14,7 @@ import java.util.List;
  * @author : Bakhromjon Khasanboyev
  **/
 @Repository
-public class PostDAO {
+public class PostDAO  {
     @Autowired
     private EntityManager entityManager;
 

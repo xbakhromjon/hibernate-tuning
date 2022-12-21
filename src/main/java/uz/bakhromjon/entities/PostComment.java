@@ -21,7 +21,7 @@ public class PostComment {
     @Id
     private Long id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     private Post post;
 
     private String review;
